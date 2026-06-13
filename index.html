@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>路昊明 | Workstation</title>
   <script>history.scrollRestoration='manual';</script>
+  <script>(function(){try{var t=localStorage.getItem('theme')||'dark';if(t==='light')document.documentElement.classList.add('light');}catch(e){}})();</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script type="importmap">
@@ -21,22 +22,79 @@
       --text-secondary: #9c9cb4;
       --text-muted: #6a6a82;
       --accent: #79ff1d;
+      --accent-rgb: 121 255 29;
+      --hl-1: #b8ff6e;
+      --hl-2: #d4ff99;
+      --brand-bg: var(--accent);
+      --brand-border: var(--accent);
+      --brand-fg: #0a0a14;
+      --brand-hover-bg: #9cff4a;
+      --brand-hover-border: #9cff4a;
+      --robot-fill: #0a0a14;
+      --robot-stroke: #0a0a14;
       --accent-glow: rgba(173, 246, 79, 0.16);
       --accent-soft: rgba(173, 246, 79, 0.08);
+      --nav-bg: rgba(16,16,28,0.92);
+      --nav-border: rgba(255,255,255,0.04);
+      --nav-contact-bg: rgba(255,255,255,0.06);
+      --nav-contact-bg-hover: rgba(255,255,255,0.10);
+      --glow-1: rgba(173, 246, 79, 0.09);
+      --glow-2: rgba(160, 180, 220, 0.06);
+      --glow-3: rgba(173, 246, 79, 0.03);
+      --particle-r: 40; --particle-g: 140; --particle-b: 20;
+      --particle-r2: 121; --particle-g2: 255; --particle-b2: 60;
       --radius: 10px;
       --max-width: 1100px;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    :root.light {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-hover: #f0f1f4;
+      --border: #e2e4e8;
+      --border-hover: #c4c8d0;
+      --text: #1a2332;
+      --text-secondary: #4a5568;
+      --text-muted: #8088a0;
+      --accent: #1e3a8a;
+      --accent-rgb: 30 58 138;
+      --hl-1: #4a6dc4;
+      --hl-2: #7ba3e0;
+      --brand-bg: #4a6dc4;
+      --brand-border: #5a7ad0;
+      --brand-fg: #ffffff;
+      --brand-hover-bg: #5a7ad0;
+      --brand-hover-border: #6a8adc;
+      --robot-fill: #ffffff;
+      --robot-stroke: #ffffff;
+      --accent-glow: rgba(30, 58, 138, 0.12);
+      --accent-soft: rgba(30, 58, 138, 0.06);
+      --nav-bg: rgba(255,255,255,0.88);
+      --nav-border: rgba(0,0,0,0.06);
+      --nav-contact-bg: rgba(0,0,0,0.04);
+      --nav-contact-bg-hover: rgba(0,0,0,0.08);
+      --glow-1: rgba(30, 58, 138, 0.06);
+      --glow-2: rgba(120, 140, 180, 0.05);
+      --glow-3: rgba(30, 58, 138, 0.02);
+      --particle-r: 100; --particle-g: 110; --particle-b: 130;
+      --particle-r2: 30; --particle-g2: 60; --particle-b2: 130;
+    }
+    :root.light .contact-card .icon { color: var(--text); }
+    a.contact-card, a.tilt-card { color: inherit; text-decoration: none; }
+    a.contact-card:visited, a.tilt-card:visited { color: inherit; }
+    a.btn, a.btn:visited { text-decoration: none; }
+    a.btn-primary, a.btn-primary:visited { color: var(--bg); }
+    :root.light a.btn-primary, :root.light a.btn-primary:visited { color: #ffffff; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
 
     body {
       background:
-        radial-gradient(ellipse 1000px 550px at 50% 0%, rgba(173, 246, 79, 0.09), transparent 50%),
-        radial-gradient(ellipse 600px 400px at 85% 100%, rgba(160, 180, 220, 0.06), transparent 50%),
-        radial-gradient(ellipse 500px 350px at 15% 60%, rgba(173, 246, 79, 0.03), transparent 50%),
+        radial-gradient(ellipse 1000px 550px at 50% 0%, var(--glow-1), transparent 50%),
+        radial-gradient(ellipse 600px 400px at 85% 100%, var(--glow-2), transparent 50%),
+        radial-gradient(ellipse 500px 350px at 15% 60%, var(--glow-3), transparent 50%),
         var(--bg);
       background-attachment: fixed;
       color: var(--text);
@@ -159,14 +217,14 @@
       padding: 14px calc((100vw - min(var(--max-width), calc(100% - 48px))) / 2);
       margin: 0 calc(-1 * (100vw - 100%) / 2);
       font-size: 14px;
-      background: rgba(16,16,28,0.92);
+      background: var(--nav-bg);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       transition: border-color 0.3s var(--ease-out);
       border-bottom: 1px solid transparent;
     }
     .nav.scrolled {
-      border-bottom-color: rgba(255,255,255,0.04);
+      border-bottom-color: var(--nav-border);
     }
 
     .brand {
@@ -175,26 +233,31 @@
       display: flex; align-items: center; gap: 10px;
       padding: 6px 18px 6px 8px;
       border-radius: 28px;
-      background: #79ff1d;
-      border: 1px solid #79ff1d;
-      color: #0a0a14;
+      background: var(--brand-bg);
+      border: 1px solid var(--brand-border);
+      color: var(--brand-fg);
       font-weight: 700; font-size: 15px;
       letter-spacing: -0.01em;
       text-decoration: none;
       transition: background 0.3s var(--ease-out), border-color 0.3s var(--ease-out), box-shadow 0.3s var(--ease-out), transform 0.3s var(--ease-out);
     }
     .brand:hover {
-      background: #9cff4a;
-      border-color: #9cff4a;
-      box-shadow: 0 0 24px rgba(121,255,29,0.35);
+      background: var(--brand-hover-bg);
+      border-color: var(--brand-hover-border);
+      box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.35);
       transform: translateY(-1px);
-      color: #0a0a14;
+      color: var(--brand-fg);
       text-shadow: none;
     }
     .brand .robot-head {
       width: 30px; height: 30px;
       flex-shrink: 0;
+      stroke: var(--robot-stroke);
+      fill: var(--robot-fill);
     }
+    .brand .robot-head circle[stroke="none"],
+    .brand .robot-head rect { fill: var(--robot-fill); }
+    .brand .robot-head .eye { fill: var(--accent) !important; }
     .brand .robot-head .eye {
       transform-origin: center;
       animation: eye-blink 4s ease-in-out infinite;
@@ -241,7 +304,7 @@
       position: absolute; pointer-events: none; z-index: 0;
       border-radius: 100vw;
       border: 1.5px solid var(--accent);
-      box-shadow: 0 0 12px rgba(121,255,29,0.15);
+      box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.15);
       transition: none;
     }
 
@@ -252,10 +315,13 @@
       text-decoration: none;
       padding: 5px 14px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.06);
+      background: var(--nav-contact-bg);
       transition: color 0.25s var(--ease-out), background 0.25s var(--ease-out);
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
     }
-    .nav-contact:hover { color: var(--accent); background: rgba(255,255,255,0.1); }
+    .nav-contact:hover { color: var(--accent); background: var(--nav-contact-bg-hover); }
     @media (max-width: 768px) {
       .nav-contact { right: 14px; top: 12px; font-size: 13px; padding: 3px 10px; }
     }
@@ -282,11 +348,11 @@
       background: var(--accent-soft);
       color: var(--accent);
       transform: translateY(-2px) scale(1.03);
-      box-shadow: 0 0 20px rgba(121,255,29,0.12);
+      box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.12);
     }
     .badge-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: #4ade80;
+      background: var(--accent);
       box-shadow: 0 0 6px rgba(74,222,128,0.4);
       animation: pulse-dot 2.5s ease-in-out infinite;
     }
@@ -299,7 +365,7 @@
       letter-spacing: -0.03em;
     }
     h1 .hl {
-      background: linear-gradient(135deg, var(--accent) 0%, #b8ff6e 40%, #d4ff99 60%, var(--accent) 100%);
+      background: linear-gradient(135deg, var(--accent) 0%, var(--hl-1) 40%, var(--hl-2) 60%, var(--accent) 100%);
       background-size: 300% 100%;
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -321,9 +387,9 @@
     .hero-ring::before {
       content: ''; position: absolute;
       width: 10px; height: 10px; border-radius: 50%;
-      background: rgba(121,255,29,0.6);
+      background: rgba(var(--accent-rgb), 0.6);
       top: -5px; left: 50%;
-      box-shadow: 0 0 14px rgba(121,255,29,0.4);
+      box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.4);
       animation: ring-dot 8s ease-in-out infinite;
     }
     @keyframes ring-float {
@@ -354,8 +420,8 @@
     .hero-diamond {
       position: absolute; pointer-events: none; z-index: 0;
       width: 14px; height: 14px;
-      background: rgba(121,255,29,0.15);
-      border: 1px solid rgba(121,255,29,0.25);
+      background: rgba(var(--accent-rgb), 0.15);
+      border: 1px solid rgba(var(--accent-rgb), 0.25);
       transform: rotate(45deg);
       animation: diamond-drift 9s ease-in-out infinite;
     }
@@ -385,7 +451,7 @@
     .hero-scan {
       position: absolute; pointer-events: none; z-index: 0;
       width: 100%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(121,255,29,0.15) 20%, rgba(121,255,29,0.3) 50%, rgba(121,255,29,0.15) 80%, transparent);
+      background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.15) 20%, rgba(var(--accent-rgb), 0.3) 50%, rgba(var(--accent-rgb), 0.15) 80%, transparent);
       top: 0;
       animation: scan-sweep 7s ease-in-out infinite;
     }
@@ -458,6 +524,21 @@
       border: 1px solid var(--border);
     }
     .btn:active { transform: scale(0.96) !important; transition: transform 0.1s var(--ease-out); }
+    :root.light .btn-primary {
+      background: var(--accent) !important; color: #ffffff !important; border: 1px solid var(--accent) !important;
+    }
+    :root.light .btn-primary:hover {
+      background: #2a4ba8 !important; border-color: #2a4ba8 !important;
+    }
+    :root.light .btn-ghost {
+      background: rgba(var(--accent-rgb), 0.06);
+      color: var(--text);
+      border: 1px solid rgba(var(--accent-rgb), 0.35);
+    }
+    :root.light .btn-ghost:hover {
+      background: rgba(var(--accent-rgb), 0.12);
+      border-color: rgba(var(--accent-rgb), 0.6);
+    }
 
     /* ── Section headers ── */
     .sec-label {
@@ -471,6 +552,7 @@
       font-weight: 850; line-height: 1.2;
       letter-spacing: -0.02em;
       max-width: 600px;
+      color: var(--text);
     }
     .sec-desc {
       margin-top: 12px; color: var(--text-secondary);
@@ -559,14 +641,14 @@
       background:
         linear-gradient(var(--surface) 0 100%) padding-box,
         linear-gradient(rgb(255 255 255 / 0%) 0% 100%) border-box,
-        radial-gradient(at 80% 55%, var(--grad-c1, #79ff1d) 0px, transparent 50%) border-box,
-        radial-gradient(at 69% 34%, var(--grad-c2, #79ff1d) 0px, transparent 50%) border-box,
+        radial-gradient(at 80% 55%, var(--grad-c1, var(--accent)) 0px, transparent 50%) border-box,
+        radial-gradient(at 69% 34%, var(--grad-c2, var(--accent)) 0px, transparent 50%) border-box,
         radial-gradient(at 8% 6%, var(--grad-c3, #00e044) 0px, transparent 50%) border-box,
-        radial-gradient(at 41% 38%, var(--grad-c1, #79ff1d) 0px, transparent 50%) border-box,
-        radial-gradient(at 86% 85%, var(--grad-c2, #79ff1d) 0px, transparent 50%) border-box,
+        radial-gradient(at 41% 38%, var(--grad-c1, var(--accent)) 0px, transparent 50%) border-box,
+        radial-gradient(at 86% 85%, var(--grad-c2, var(--accent)) 0px, transparent 50%) border-box,
         radial-gradient(at 82% 18%, var(--grad-c3, #00e044) 0px, transparent 50%) border-box,
-        radial-gradient(at 51% 4%, var(--grad-c2, #79ff1d) 0px, transparent 50%) border-box,
-        linear-gradient(var(--grad-c1, #79ff1d) 0 100%) border-box;
+        radial-gradient(at 51% 4%, var(--grad-c2, var(--accent)) 0px, transparent 50%) border-box,
+        linear-gradient(var(--grad-c1, var(--accent)) 0 100%) border-box;
       opacity: calc((var(--edge-proximity) - var(--color-sensitivity)) / (100 - var(--color-sensitivity)));
       mask-image: conic-gradient(
         from var(--cursor-angle) at center,
@@ -581,14 +663,14 @@
     .border-glow-card::after {
       border: 1px solid transparent;
       background:
-        radial-gradient(at 80% 55%, var(--grad-c1, #79ff1d) 0px, transparent 50%) padding-box,
-        radial-gradient(at 69% 34%, var(--grad-c2, #79ff1d) 0px, transparent 50%) padding-box,
+        radial-gradient(at 80% 55%, var(--grad-c1, var(--accent)) 0px, transparent 50%) padding-box,
+        radial-gradient(at 69% 34%, var(--grad-c2, var(--accent)) 0px, transparent 50%) padding-box,
         radial-gradient(at 8% 6%, var(--grad-c3, #00e044) 0px, transparent 50%) padding-box,
-        radial-gradient(at 41% 38%, var(--grad-c1, #79ff1d) 0px, transparent 50%) padding-box,
-        radial-gradient(at 86% 85%, var(--grad-c2, #79ff1d) 0px, transparent 50%) padding-box,
+        radial-gradient(at 41% 38%, var(--grad-c1, var(--accent)) 0px, transparent 50%) padding-box,
+        radial-gradient(at 86% 85%, var(--grad-c2, var(--accent)) 0px, transparent 50%) padding-box,
         radial-gradient(at 82% 18%, var(--grad-c3, #00e044) 0px, transparent 50%) padding-box,
-        radial-gradient(at 51% 4%, var(--grad-c2, #79ff1d) 0px, transparent 50%) padding-box,
-        linear-gradient(var(--grad-c1, #79ff1d) 0 100%) padding-box;
+        radial-gradient(at 51% 4%, var(--grad-c2, var(--accent)) 0px, transparent 50%) padding-box,
+        linear-gradient(var(--grad-c1, var(--accent)) 0 100%) padding-box;
       mask-image:
         linear-gradient(to bottom, black, black),
         radial-gradient(ellipse at 50% 50%, black 40%, transparent 65%),
@@ -758,7 +840,7 @@
       transition: text-shadow 0.3s var(--ease-out);
     }
     .timeline-item:hover .year {
-      text-shadow: 0 0 10px rgba(121,255,29,0.3);
+      text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.3);
     }
     .timeline-item .info { font-size: 13px; color: var(--text-secondary); line-height: 1.55; transition: color 0.3s var(--ease-out); }
     .timeline-item:hover .info { color: var(--text); }
@@ -799,7 +881,7 @@
       color: var(--accent);
       background: var(--accent-soft);
       transform: scale(1.05);
-      box-shadow: 0 0 12px rgba(121,255,29,0.12);
+      box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.12);
     }
     .project-card h3 { font-size: 21px; font-weight: 750; letter-spacing: -0.01em; }
     .project-card p {
@@ -843,7 +925,7 @@
       background: var(--accent-soft);
       color: var(--accent);
       transform: translateY(-4px);
-      box-shadow: 0 0 22px rgba(121,255,29,0.2), 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.2), 0 4px 12px rgba(0,0,0,0.3);
     }
     .contact-card h4 {
       font-size: 15px; font-weight: 700; margin-bottom: 4px;
@@ -924,7 +1006,7 @@
     /* Copy toast */
     .copy-toast {
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      background: #79ff1d; color: #0a0a14; padding: 8px 20px; border-radius: 8px;
+      background: var(--accent); color: #0a0a14; padding: 8px 20px; border-radius: 8px;
       font-size: 14px; font-weight: 600; z-index: 10000;
       opacity: 0; pointer-events: none; transition: opacity .2s;
     }
@@ -1158,7 +1240,7 @@
       color: var(--accent);
       background: var(--accent-soft);
       transform: scale(1.05);
-      box-shadow: 0 0 12px rgba(121,255,29,0.12);
+      box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.12);
     }
     .project-card h3 { font-size: 21px; font-weight: 750; letter-spacing: -0.01em; }
     .project-card p {
@@ -1202,7 +1284,7 @@
       background: var(--accent-soft);
       color: var(--accent);
       transform: translateY(-4px);
-      box-shadow: 0 0 22px rgba(121,255,29,0.2), 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.2), 0 4px 12px rgba(0,0,0,0.3);
     }
     .contact-card h4 {
       font-size: 15px; font-weight: 700; margin-bottom: 4px;
@@ -1283,7 +1365,7 @@
     /* Copy toast */
     .copy-toast {
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      background: #79ff1d; color: #0a0a14; padding: 8px 20px; border-radius: 8px;
+      background: var(--accent); color: #0a0a14; padding: 8px 20px; border-radius: 8px;
       font-size: 14px; font-weight: 600; z-index: 10000;
       opacity: 0; pointer-events: none; transition: opacity .2s;
     }
@@ -1306,8 +1388,8 @@
       --background-x: 50%;
       --background-y: 50%;
       --card-radius: 24px;
-      --inner-gradient: linear-gradient(145deg, #0a1a058c 0%, #79ff1d22 100%);
-      --behind-glow-color: rgba(121, 255, 29, 0.25);
+      --inner-gradient: linear-gradient(145deg, rgba(0,0,0,0.4) 0%, rgba(var(--accent-rgb), 0.13) 100%);
+      --behind-glow-color: rgba(var(--accent-rgb), 0.25);
       --behind-glow-size: 50%;
       --sunpillar-1: hsl(80, 60%, 55%);
       --sunpillar-2: hsl(100, 55%, 52%);
@@ -1500,14 +1582,14 @@
     .pc-details { width: 100%; position: absolute; top: 3em; display: flex; flex-direction: column; }
     .pc-details h3 {
       font-weight: 600; margin: 0; font-size: min(5svh, 3em);
-      background-image: linear-gradient(to bottom, #fff, #79ff1d);
+      background-image: linear-gradient(to bottom, #fff, var(--accent));
       background-size: 1em 1.5em;
       -webkit-text-fill-color: transparent; background-clip: text; -webkit-background-clip: text;
     }
     .pc-details p {
       font-weight: 600; position: relative; top: -12px; white-space: nowrap;
       font-size: 16px; margin: 0 auto; width: min-content;
-      background-image: linear-gradient(to bottom, #fff, #79ff1d);
+      background-image: linear-gradient(to bottom, #fff, var(--accent));
       background-size: 1em 1.5em;
       -webkit-text-fill-color: transparent; background-clip: text; -webkit-background-clip: text;
     }
@@ -1565,7 +1647,7 @@
       color: var(--accent);
       background: var(--accent-soft);
       transform: scale(1.05);
-      box-shadow: 0 0 12px rgba(121,255,29,0.12);
+      box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.12);
     }
     .project-card h3 { font-size: 21px; font-weight: 750; letter-spacing: -0.01em; }
     .project-card p {
@@ -1609,7 +1691,7 @@
       background: var(--accent-soft);
       color: var(--accent);
       transform: translateY(-4px);
-      box-shadow: 0 0 22px rgba(121,255,29,0.2), 0 4px 12px rgba(0,0,0,0.3);
+      box-shadow: 0 0 22px rgba(var(--accent-rgb), 0.2), 0 4px 12px rgba(0,0,0,0.3);
     }
     .contact-card h4 {
       font-size: 15px; font-weight: 700; margin-bottom: 4px;
@@ -1690,7 +1772,7 @@
     /* Copy toast */
     .copy-toast {
       position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      background: #79ff1d; color: #0a0a14; padding: 8px 20px; border-radius: 8px;
+      background: var(--accent); color: #0a0a14; padding: 8px 20px; border-radius: 8px;
       font-size: 14px; font-weight: 600; z-index: 10000;
       opacity: 0; pointer-events: none; transition: opacity .2s;
     }
@@ -1713,8 +1795,8 @@
       --background-y: 50%;
       --pc-grain: none;
       --pc-icon: none;
-      --pc-inner-gradient: linear-gradient(145deg, #0a1a058c 0%, #79ff1d22 100%);
-      --pc-behind-glow-color: rgba(121, 255, 29, 0.18);
+      --pc-inner-gradient: linear-gradient(145deg, rgba(0,0,0,0.4) 0%, rgba(var(--accent-rgb), 0.13) 100%);
+      --pc-behind-glow-color: rgba(var(--accent-rgb), 0.18);
       --pc-behind-glow-size: 50%;
       --pc-sunpillar-1: hsl(80, 60%, 55%);
       --pc-sunpillar-2: hsl(100, 55%, 52%);
@@ -2026,7 +2108,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #4ade80;
+      background: var(--accent);
       box-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
       animation: pulse-dot 2.5s ease-in-out infinite;
     }
@@ -2052,7 +2134,7 @@
       border-color: var(--accent);
       color: var(--accent);
       transform: translateY(-1px);
-      box-shadow: 0 0 12px rgba(121, 255, 29, 0.2);
+      box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.2);
     }
 
     .pc-content:not(.pc-avatar-content) {
@@ -2082,7 +2164,7 @@
       font-weight: 600;
       margin: 0;
       font-size: min(4svh, 2.2em);
-      background-image: linear-gradient(to bottom, #fff, #79ff1d);
+      background-image: linear-gradient(to bottom, #fff, var(--accent));
       background-size: 1em 1.5em;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -2099,7 +2181,7 @@
       font-size: 14px;
       margin: 0 auto;
       width: min-content;
-      background-image: linear-gradient(to bottom, #fff, #4ade80);
+      background-image: linear-gradient(to bottom, #fff, var(--accent));
       background-size: 1em 1.5em;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -2138,7 +2220,7 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      color: rgba(121, 255, 29, 0.4);
+      color: rgba(var(--accent-rgb), 0.4);
     }
 
     .pc-avatar-placeholder svg {
@@ -2229,12 +2311,12 @@
     <!-- Navigation -->
     <header class="nav" id="navbar">
       <a class="brand" href="#">
-        <svg class="robot-head" viewBox="0 0 40 40" fill="none" stroke="#333" stroke-width="2">
+        <svg class="robot-head" viewBox="0 0 40 40" fill="none" stroke-width="2">
           <line x1="20" y1="2" x2="20" y2="8"/>
-          <circle cx="20" cy="2" r="2.5" fill="#333" stroke="none"/>
-          <rect x="4" y="8" width="32" height="26" rx="5" fill="#0a0a14"/>
-          <ellipse class="eye eye-left" cx="14" cy="19" rx="2.5" ry="5" fill="#79ff1d" stroke="none"/>
-          <ellipse class="eye eye-right" cx="26" cy="19" rx="2.5" ry="5" fill="#79ff1d" stroke="none"/>
+          <circle cx="20" cy="2" r="2.5" stroke="none"/>
+          <rect x="4" y="8" width="32" height="26" rx="5"/>
+          <ellipse class="eye eye-left" cx="14" cy="19" rx="2.5" ry="5" stroke="none"/>
+          <ellipse class="eye eye-right" cx="26" cy="19" rx="2.5" ry="5" stroke="none"/>
         </svg>
         Lu Haoming
       </a>
@@ -2249,7 +2331,19 @@
           </ul>
         </nav>
       </div>
-      <a class="nav-contact" href="#contact">联系</a>
+      <button class="nav-contact" id="themeToggle" type="button" aria-label="切换主题">切换白天模式</button>
+      <script>(function(){
+        var btn=document.getElementById('themeToggle');if(!btn)return;
+        var root=document.documentElement;
+        function sync(){btn.textContent=root.classList.contains('light')?'切换夜间模式':'切换白天模式';if(window.__refreshParticleColors)window.__refreshParticleColors();if(window.__refreshFerroColors)window.__refreshFerroColors();}
+        sync();
+        btn.addEventListener('click',function(){
+          var next=root.classList.contains('light')?'dark':'light';
+          root.classList.toggle('light',next==='light');
+          try{localStorage.setItem('theme',next);}catch(e){}
+          sync();
+        });
+      })();</script>
     </header>
 
     <!-- Hero -->
@@ -2373,10 +2467,10 @@
       <div class="about-grid">
         <div class="tilt-card about-card reveal">
           <h3>背景</h3>
-          <p>动画专业背景，从 AIGC 工具实践者成长为 AI 产品经理。先后在杭州共鸣魔法参与 IP 周边美术产品全流程落地，在泡泡玛特负责 AIGC 内容运营与生成流程标准化，在字节跳动（外派）主导游戏内 AI 虚拟陪伴产品和 AIGC 工作流搭建。</p>
+          <p>动画专业背景，从 AIGC 工具实践者成长为 AI 产品经理。在泡泡玛特从 IP 周边美术实习起步，转正后负责 AIGC 美术运营与生成流程标准化，后在字节跳动（外派）主导游戏内 AI 虚拟陪伴产品和 AIGC 工作流搭建。</p>
           <div class="timeline">
-            <div class="timeline-item"><span class="year">2022</span><span class="info"><strong>美术产品实习 · 共鸣魔法</strong><br>IP 周边美术产品全流程落地</span></div>
-            <div class="timeline-item"><span class="year">2023</span><span class="info"><strong>AIGC 内容运营 · 泡泡玛特</strong><br>提示词工程、生成流程优化</span></div>
+            <div class="timeline-item"><span class="year">2022</span><span class="info"><strong>IP美术产品设计（实习）· 泡泡玛特</strong><br>IP 周边美术产品全流程落地</span></div>
+            <div class="timeline-item"><span class="year">2023</span><span class="info"><strong>AIGC 美术运营 · 泡泡玛特</strong><br>提示词工程、生成流程优化</span></div>
             <div class="timeline-item"><span class="year">2024</span><span class="info"><strong>AI 产品经理 · 字节跳动</strong><br>虚拟陪伴产品 & AIGC 工作流</span></div>
           </div>
         </div>
@@ -2384,7 +2478,7 @@
           <h3>项目经历</h3>
           <div class="timeline">
             <div class="timeline-item"><span class="year">01</span><span class="info"><strong>AI 虚拟陪伴产品</strong><br>主导游戏内 AI 对话角色从 0 到 1 落地，Prompt 分层设计与灰度测试</span></div>
-            <div class="timeline-item"><span class="year">02</span><span class="info"><strong>AIGC 美术生产流程</strong><br>搭建 ComfyUI 角色设计辅助流程，设定周期从 7 天缩短至 3 天</span></div>
+            <div class="timeline-item"><span class="year">02</span><span class="info"><strong>ComfyUI 角色设计流程</strong><br>搭建游戏角色设计 ComfyUI 工作流，设定周期从 7 天缩短至 3 天</span></div>
             <div class="timeline-item"><span class="year">03</span><span class="info"><strong>AIGC 视频生成工具</strong><br>基于扣子平台搭建视频生成 Agent，打通脚本到视频全链路</span></div>
             <div class="timeline-item"><span class="year">04</span><span class="info"><strong>AIGC 短剧工作台</strong><br>面向短剧团队的前期生产工作台，Brief 到多平台提示词导出</span></div>
           </div>
@@ -2428,24 +2522,24 @@
       <div class="contact-grid">
         <div class="tilt-card contact-card reveal" data-copy="1687751533@qq.com">
           <div class="icon">
-            <svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M23.7927 44.5178C20.1344 44.5178 16.7762 43.2933 14.6142 41.4646C13.5161 41.7927 12.1115 42.3204 11.2254 42.9751C10.4664 43.535 10.5613 44.1059 10.6979 44.3362C11.298 45.3491 20.9938 44.9831 23.7927 44.6678V44.5178ZM23.7927 44.5178C27.4516 44.5178 30.8095 43.2933 32.9718 41.4646C34.0693 41.7927 35.4742 42.3204 36.3606 42.9751C37.119 43.535 37.0244 44.1059 36.8875 44.3362C36.2874 45.3491 26.5919 44.9831 23.7927 44.6678V44.5178Z" fill="#b0b0b0"/><path fill-rule="evenodd" clip-rule="evenodd" d="M36.3386 20.9326C34.6979 21.3809 29.856 22.5505 23.8144 22.5914H23.7698C17.5753 22.5491 12.6423 21.3214 11.1274 20.8999C10.816 20.8129 10.6458 20.6334 10.6458 20.6334C10.644 20.5785 10.6207 19.6503 10.6207 19.171C10.6207 11.1055 14.4284 3.00029 23.7922 3C33.1561 3.00029 36.9635 11.1052 36.9635 19.1713C36.9635 19.65 36.9402 20.5785 36.9387 20.6337C36.9387 20.6337 36.7297 20.8255 36.3386 20.9326ZM38.8284 25.3504C39.3462 26.7001 39.8573 28.1055 40.2318 29.3107C42.0176 35.0578 41.4388 37.4364 40.9986 37.4898C40.0532 37.6039 37.3187 33.1634 37.3187 33.1634C37.3187 37.6757 33.2448 44.604 23.916 44.6677H23.6685C14.3394 44.604 10.2655 37.6757 10.2655 33.1634C10.2655 33.1634 7.53131 37.6039 6.58588 37.4895C6.14542 37.4364 5.5666 35.0581 7.35268 29.3107C7.72717 28.1058 8.23827 26.7001 8.75609 25.3504C8.75609 25.3504 9.10519 25.3285 9.28207 25.3795C10.7319 25.798 12.2762 26.1689 13.8447 26.4792C13.5776 28.1343 13.4249 30.1827 13.5692 32.6021C13.9533 39.0363 17.7745 43.081 23.6727 43.1394H23.9121C29.8106 43.081 33.6314 39.0363 34.0161 32.6021C34.1604 30.1823 34.0075 28.1345 33.7402 26.4793C35.3363 26.1633 36.9076 25.7848 38.3798 25.3571C38.5307 25.3136 38.8284 25.3504 38.8284 25.3504ZM33.7402 26.4793C30.3004 27.1601 26.7448 27.5502 23.8144 27.5147H23.7698C20.8396 27.5498 17.2841 27.1598 13.8447 26.4792C13.8586 26.3929 13.8728 26.3076 13.8874 26.2234C17.3136 26.8989 20.8513 27.2853 23.769 27.2503H23.8137L23.814 27.25C26.7323 27.2856 30.2709 26.8989 33.6974 26.2231C33.712 26.3074 33.7262 26.3928 33.7402 26.4793ZM18.0376 11.6868C18.1059 13.5266 19.1912 14.9735 20.4615 14.916C21.7309 14.8594 22.7044 13.3208 22.6349 11.4802C22.566 9.6398 21.4811 8.19348 20.2122 8.2504C18.9419 8.30791 17.9687 9.84646 18.0376 11.6868ZM27.1253 14.916C28.3957 14.9735 29.4809 13.5263 29.5489 11.6868C29.6181 9.84646 28.6449 8.30791 27.3746 8.2504C26.1055 8.19378 25.0208 9.64009 24.9519 11.4805C24.8825 13.3208 25.8556 14.8591 27.1253 14.916ZM23.8148 15.9248C28.0469 15.9248 31.4658 16.7625 31.805 17.5141V17.5144C31.821 17.5477 31.8295 17.5841 31.8298 17.621C31.8294 17.6731 31.8131 17.7238 31.7831 17.7663C31.497 18.1835 27.701 20.2436 23.8148 20.2436H23.7692C19.8827 20.2436 16.0867 18.1829 15.8006 17.7663C15.7708 17.7239 15.7545 17.6734 15.7539 17.6216C15.7542 17.5845 15.7627 17.5479 15.7787 17.5144C16.1182 16.7625 19.5368 15.9248 23.7692 15.9248H23.8148Z" fill="#ffffff"/><path d="M22.0218 11.7142C22.0799 12.441 21.6812 13.0867 21.1327 13.157C20.5831 13.2277 20.0912 12.6958 20.0329 11.969C19.9754 11.2416 20.3735 10.596 20.9211 10.5259C21.4716 10.4547 21.9643 10.9871 22.0218 11.7139V11.7142ZM25.5117 11.9571C25.624 11.7559 26.3885 10.6984 27.9714 11.0834C28.3874 11.1847 28.5797 11.3336 28.6203 11.392C28.6801 11.4784 28.6968 11.6015 28.6358 11.7673C28.5155 12.096 28.2671 12.087 28.1296 12.0227C28.0406 11.9813 26.9381 11.2463 25.9223 12.3429C25.8523 12.418 25.7274 12.4439 25.6091 12.3546C25.4903 12.2647 25.4416 12.0832 25.5117 11.9571Z" fill="#e0e0e0"/><path d="M15.5039 26.7117V33.0437C15.5039 33.0437 18.4044 33.6286 21.3105 33.2235V27.383C19.4695 27.2788 17.4841 27.0468 15.5039 26.7117Z" fill="#e04040"/><path d="M36.9385 20.6337C36.9385 20.6337 31.2962 22.4148 23.8142 22.4653H23.7695C16.2998 22.4151 10.6648 20.6395 10.6456 20.6337L8.75586 25.35C13.4824 26.775 19.3401 27.6933 23.7695 27.6399H23.8142C28.2436 27.6933 34.101 26.775 38.8282 25.35L36.9385 20.6337Z" fill="#d0d0d0"/></svg>
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M23.7927 44.5178C20.1344 44.5178 16.7762 43.2933 14.6142 41.4646C13.5161 41.7927 12.1115 42.3204 11.2254 42.9751C10.4664 43.535 10.5613 44.1059 10.6979 44.3362C11.298 45.3491 20.9938 44.9831 23.7927 44.6678V44.5178ZM23.7927 44.5178C27.4516 44.5178 30.8095 43.2933 32.9718 41.4646C34.0693 41.7927 35.4742 42.3204 36.3606 42.9751C37.119 43.535 37.0244 44.1059 36.8875 44.3362C36.2874 45.3491 26.5919 44.9831 23.7927 44.6678V44.5178Z" fill="#b0b0b0"/><path fill-rule="evenodd" clip-rule="evenodd" d="M36.3386 20.9326C34.6979 21.3809 29.856 22.5505 23.8144 22.5914H23.7698C17.5753 22.5491 12.6423 21.3214 11.1274 20.8999C10.816 20.8129 10.6458 20.6334 10.6458 20.6334C10.644 20.5785 10.6207 19.6503 10.6207 19.171C10.6207 11.1055 14.4284 3.00029 23.7922 3C33.1561 3.00029 36.9635 11.1052 36.9635 19.1713C36.9635 19.65 36.9402 20.5785 36.9387 20.6337C36.9387 20.6337 36.7297 20.8255 36.3386 20.9326ZM38.8284 25.3504C39.3462 26.7001 39.8573 28.1055 40.2318 29.3107C42.0176 35.0578 41.4388 37.4364 40.9986 37.4898C40.0532 37.6039 37.3187 33.1634 37.3187 33.1634C37.3187 37.6757 33.2448 44.604 23.916 44.6677H23.6685C14.3394 44.604 10.2655 37.6757 10.2655 33.1634C10.2655 33.1634 7.53131 37.6039 6.58588 37.4895C6.14542 37.4364 5.5666 35.0581 7.35268 29.3107C7.72717 28.1058 8.23827 26.7001 8.75609 25.3504C8.75609 25.3504 9.10519 25.3285 9.28207 25.3795C10.7319 25.798 12.2762 26.1689 13.8447 26.4792C13.5776 28.1343 13.4249 30.1827 13.5692 32.6021C13.9533 39.0363 17.7745 43.081 23.6727 43.1394H23.9121C29.8106 43.081 33.6314 39.0363 34.0161 32.6021C34.1604 30.1823 34.0075 28.1345 33.7402 26.4793C35.3363 26.1633 36.9076 25.7848 38.3798 25.3571C38.5307 25.3136 38.8284 25.3504 38.8284 25.3504ZM33.7402 26.4793C30.3004 27.1601 26.7448 27.5502 23.8144 27.5147H23.7698C20.8396 27.5498 17.2841 27.1598 13.8447 26.4792C13.8586 26.3929 13.8728 26.3076 13.8874 26.2234C17.3136 26.8989 20.8513 27.2853 23.769 27.2503H23.8137L23.814 27.25C26.7323 27.2856 30.2709 26.8989 33.6974 26.2231C33.712 26.3074 33.7262 26.3928 33.7402 26.4793ZM18.0376 11.6868C18.1059 13.5266 19.1912 14.9735 20.4615 14.916C21.7309 14.8594 22.7044 13.3208 22.6349 11.4802C22.566 9.6398 21.4811 8.19348 20.2122 8.2504C18.9419 8.30791 17.9687 9.84646 18.0376 11.6868ZM27.1253 14.916C28.3957 14.9735 29.4809 13.5263 29.5489 11.6868C29.6181 9.84646 28.6449 8.30791 27.3746 8.2504C26.1055 8.19378 25.0208 9.64009 24.9519 11.4805C24.8825 13.3208 25.8556 14.8591 27.1253 14.916ZM23.8148 15.9248C28.0469 15.9248 31.4658 16.7625 31.805 17.5141V17.5144C31.821 17.5477 31.8295 17.5841 31.8298 17.621C31.8294 17.6731 31.8131 17.7238 31.7831 17.7663C31.497 18.1835 27.701 20.2436 23.8148 20.2436H23.7692C19.8827 20.2436 16.0867 18.1829 15.8006 17.7663C15.7708 17.7239 15.7545 17.6734 15.7539 17.6216C15.7542 17.5845 15.7627 17.5479 15.7787 17.5144C16.1182 16.7625 19.5368 15.9248 23.7692 15.9248H23.8148Z" fill="currentColor"/><path d="M22.0218 11.7142C22.0799 12.441 21.6812 13.0867 21.1327 13.157C20.5831 13.2277 20.0912 12.6958 20.0329 11.969C19.9754 11.2416 20.3735 10.596 20.9211 10.5259C21.4716 10.4547 21.9643 10.9871 22.0218 11.7139V11.7142ZM25.5117 11.9571C25.624 11.7559 26.3885 10.6984 27.9714 11.0834C28.3874 11.1847 28.5797 11.3336 28.6203 11.392C28.6801 11.4784 28.6968 11.6015 28.6358 11.7673C28.5155 12.096 28.2671 12.087 28.1296 12.0227C28.0406 11.9813 26.9381 11.2463 25.9223 12.3429C25.8523 12.418 25.7274 12.4439 25.6091 12.3546C25.4903 12.2647 25.4416 12.0832 25.5117 11.9571Z" fill="#e0e0e0"/><path d="M15.5039 26.7117V33.0437C15.5039 33.0437 18.4044 33.6286 21.3105 33.2235V27.383C19.4695 27.2788 17.4841 27.0468 15.5039 26.7117Z" fill="#e04040"/><path d="M36.9385 20.6337C36.9385 20.6337 31.2962 22.4148 23.8142 22.4653H23.7695C16.2998 22.4151 10.6648 20.6395 10.6456 20.6337L8.75586 25.35C13.4824 26.775 19.3401 27.6933 23.7695 27.6399H23.8142C28.2436 27.6933 34.101 26.775 38.8282 25.35L36.9385 20.6337Z" fill="#d0d0d0"/></svg>
           </div>
           <h4>邮箱</h4>
           <span>1687751533@qq.com</span>
         </div>
         <div class="tilt-card contact-card reveal" data-qr="18543142971">
           <div class="icon">
-            <svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M36.9974 21.7112C36.8434 13.0079 29.7401 6 21 6C12.1634 6 5 13.1634 5 22C5 26.1701 6.59531 29.9676 9.20892 32.8154L8.01043 40.0257L15.125 36.9699C18.2597 38.0122 21.218 38.2728 24 37.7516" stroke="#79ff1d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15.125" cy="18.2" r="2.25" fill="#79ff1d"/><circle cx="24.125" cy="18.2" r="2.25" fill="#79ff1d"/><path d="M38.7618 39.9293C37.0135 41.2302 34.8467 42 32.5 42C26.701 42 22 37.299 22 31.5C22 25.701 26.701 21 32.5 21C38.299 21 43 25.701 43 31.5C43 33.0997 42.6423 34.6159 42.0024 35.9728" stroke="#79ff1d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M42.0024 35.9728L43 42L38.7618 39.9293" stroke="#79ff1d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35.6875" cy="29.1" r="1.7" fill="#79ff1d"/><circle cx="28.9375" cy="29.1" r="1.7" fill="#79ff1d"/></svg>
+            <svg width="22" height="22" viewBox="0 0 48 48" fill="none"><path d="M36.9974 21.7112C36.8434 13.0079 29.7401 6 21 6C12.1634 6 5 13.1634 5 22C5 26.1701 6.59531 29.9676 9.20892 32.8154L8.01043 40.0257L15.125 36.9699C18.2597 38.0122 21.218 38.2728 24 37.7516" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15.125" cy="18.2" r="2.25" fill="var(--accent)"/><circle cx="24.125" cy="18.2" r="2.25" fill="var(--accent)"/><path d="M38.7618 39.9293C37.0135 41.2302 34.8467 42 32.5 42C26.701 42 22 37.299 22 31.5C22 25.701 26.701 21 32.5 21C38.299 21 43 25.701 43 31.5C43 33.0997 42.6423 34.6159 42.0024 35.9728" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M42.0024 35.9728L43 42L38.7618 39.9293" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35.6875" cy="29.1" r="1.7" fill="var(--accent)"/><circle cx="28.9375" cy="29.1" r="1.7" fill="var(--accent)"/></svg>
           </div>
           <h4>微信</h4>
           <span>185****2971</span>
         </div>
-        <a class="tilt-card contact-card reveal" href="https://github.com/" target="_blank">
+        <a class="tilt-card contact-card reveal" href="https://github.com/Ming-BaBa/" target="_blank">
           <div class="icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#ffffff"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/></svg>
           </div>
           <h4>GitHub</h4>
-          <span>@your-github</span>
+          <span>@Ming-BaBa</span>
         </a>
       </div>
     </section>
@@ -2530,7 +2624,12 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
     container.appendChild(gl.canvas);
     Object.assign(gl.canvas.style, { width: '100%', height: '100%', display: 'block' });
 
-    const colors = prepColors(['#79ff1d','#5ce01b','#3cb010','#1f6e07','#0d3b02','#a8f060','#4dd81a','#2b8c0c']);
+    const FERRO_PALETTE_DARK = ['#79ff1d','#5ce01b','#3cb010','#1f6e07','#0d3b02','#a8f060','#4dd81a','#2b8c0c'];
+    const FERRO_PALETTE_LIGHT = ['#7dd3fc','#38bdf8','#0ea5e9','#0284c7','#0369a1','#075985','#1e3a8a','#60a5fa'];
+    function ferroPalette() {
+      return document.documentElement.classList.contains('light') ? FERRO_PALETTE_LIGHT : FERRO_PALETTE_DARK;
+    }
+    let colors = prepColors(ferroPalette());
     const program = new Program(gl, { vertex, fragment, uniforms: {
       iResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight, 1] },
       iMouse: { value: [0, 0] },
@@ -2551,6 +2650,19 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       uMouseRadius: { value: 0.35 }
     }});
     const mesh = new Mesh(gl, { geometry, program });
+
+    function refreshFerroColors() {
+      const isLight = document.documentElement.classList.contains('light');
+      colors = prepColors(ferroPalette());
+      for (let i = 0; i < 8; i++) program.uniforms['uColor' + i].value = colors.arr[i];
+      program.uniforms.uColorCount.value = colors.count;
+      program.uniforms.uMouseColor.value = colors.avg;
+      program.uniforms.uOpacity.value = isLight ? 0.18 : 0.55;
+      program.uniforms.uGlow.value = isLight ? 1.1 : 2.0;
+      program.uniforms.uSharpness.value = isLight ? 1.8 : 2.5;
+    }
+    refreshFerroColors();
+    window.__refreshFerroColors = refreshFerroColors;
 
     const onResize = () => {
       renderer.setSize(window.innerWidth, window.innerHeight);
@@ -2575,6 +2687,13 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
     requestAnimationFrame(loop);
   </script>
 
+<script src="origami-data.js"></script>
+<script src="mirro-data.js"></script>
+<script src="spark-data.js"></script>
+<script src="frameforge-data.js"></script>
+<script src="pet-data.js"></script>
+<script src="skill-data.js"></script>
+<script src="agent-data.js"></script>
 <script type="module">
     import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
 
@@ -2748,12 +2867,13 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
 
     /* ── App ── */
     const DEFAULT_ITEMS = [
-      { image: 'https://picsum.photos/seed/vibe1/800/600', text: 'AI 虚拟陪伴' },
-      { image: 'https://picsum.photos/seed/vibe2/800/600', text: 'AIGC 短剧工作台' },
-      { image: 'https://picsum.photos/seed/vibe3/800/600', text: 'Color Bloom' },
-      { image: 'https://picsum.photos/seed/vibe4/800/600', text: 'Prompt 工程' },
-      { image: 'https://picsum.photos/seed/vibe5/800/600', text: 'AIGC 美术流程' },
-      { image: 'https://picsum.photos/seed/vibe6/800/600', text: 'Agent 工作流' }
+      { image: window.__ORIGAMI_IMG__ || 'origami-knight.jpg', text: '折纸骑士' },
+      { image: window.__MIRRO_IMG__ || 'mirro.jpg', text: 'Mirro' },
+      { image: window.__SPARK_IMG__ || 'spark.jpg', text: 'Spark灵犀' },
+      { image: window.__FRAMEFORGE_IMG__ || 'frameforge.jpg', text: 'FrameForge帧铸' },
+      { image: window.__PET_IMG__ || 'pet.jpg', text: '星座运势萌宠' },
+      { image: window.__SKILL_IMG__ || 'skill.jpg', text: 'Skill 设计' },
+      { image: window.__AGENT_IMG__ || 'agent.jpg', text: '智能体搭建' }
     ];
 
     class App {
@@ -2826,12 +2946,14 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
         this.__onMove = (e) => this._onMove(e);
         this.__onUp = () => this._onUp();
         window.addEventListener('resize', this.__onResize);
-        window.addEventListener('mousedown', this.__onDown);
+        this.container.addEventListener('mousedown', this.__onDown);
         window.addEventListener('mousemove', this.__onMove);
         window.addEventListener('mouseup', this.__onUp);
-        window.addEventListener('touchstart', this.__onDown);
-        window.addEventListener('touchmove', this.__onMove);
+        this.container.addEventListener('touchstart', this.__onDown, { passive: true });
+        window.addEventListener('touchmove', this.__onMove, { passive: true });
         window.addEventListener('touchend', this.__onUp);
+        window.addEventListener('blur', this.__onUp);
+        document.addEventListener('mouseleave', this.__onUp);
       }
     }
 
@@ -2842,7 +2964,7 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       new App(el, {
         items: DEFAULT_ITEMS,
         bend: 3,
-        textColor: '#79ff1d',
+        textColor: (getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#79ff1d'),
         borderRadius: 0.05,
         font: 'bold 28px "PingFang SC","Microsoft YaHei",sans-serif',
         scrollSpeed: 2,
@@ -2859,7 +2981,7 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       if (!canvas) return;
       var ctx = canvas.getContext('2d');
       var w, h;
-      var DOT_RADIUS = 1;
+      var DOT_RADIUS = 1.4;
       var DOT_SPACING = 12;
       var CURSOR_RADIUS = 500;
       var CURSOR_FORCE = 0.85;
@@ -2868,6 +2990,18 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       var WAVE_AMPLITUDE = 4;
       var mouseX = -9999, mouseY = -9999;
       var time = 0;
+      var pc = { r1:40, g1:140, b1:20, r2:121, g2:255, b2:60 };
+      function readParticleColors() {
+        var s = getComputedStyle(document.documentElement);
+        var get = function(name, fallback) {
+          var v = parseInt((s.getPropertyValue(name) || '').trim());
+          return isNaN(v) ? fallback : v;
+        };
+        pc.r1 = get('--particle-r', 40); pc.g1 = get('--particle-g', 140); pc.b1 = get('--particle-b', 20);
+        pc.r2 = get('--particle-r2', 121); pc.g2 = get('--particle-g2', 255); pc.b2 = get('--particle-b2', 60);
+      }
+      readParticleColors();
+      window.__refreshParticleColors = readParticleColors;
       var dots = [];
 
       function resize() {
@@ -2913,8 +3047,8 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
         // Subtle glow under cursor
         if (mouseX > -9990) {
           var glow = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, GLOW_RADIUS);
-          glow.addColorStop(0, 'rgba(121,255,29,0.03)');
-          glow.addColorStop(0.5, 'rgba(121,255,29,0.015)');
+          glow.addColorStop(0, 'rgba(' + pc.r2 + ',' + pc.g2 + ',' + pc.b2 + ',0.05)');
+          glow.addColorStop(0.5, 'rgba(' + pc.r2 + ',' + pc.g2 + ',' + pc.b2 + ',0.025)');
           glow.addColorStop(1, 'rgba(0,0,0,0)');
           ctx.fillStyle = glow;
           ctx.fillRect(mouseX - GLOW_RADIUS, mouseY - GLOW_RADIUS, GLOW_RADIUS * 2, GLOW_RADIUS * 2);
@@ -2949,7 +3083,7 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
 
           // Alpha — global breathing wave
           var breath = 0.5 + Math.sin(time * 0.01) * 0.5;
-          var baseAlpha = 0.13 * breath;
+          var baseAlpha = 0.22 * breath;
           var alpha = baseAlpha;
           if (dist < GLOW_RADIUS) {
             alpha = baseAlpha + (1 - dist / GLOW_RADIUS) * 0.50 * breath;
@@ -2963,13 +3097,13 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
           d.sparklePhase += d.sparkleSpeed;
           var sparkle = 0.7 + Math.sin(d.sparklePhase) * 0.2;
           alpha *= sparkle;
-          alpha = Math.max(0.03, Math.min(0.65, alpha));
+          alpha = Math.max(0.03, Math.min(0.85, alpha));
 
           // Gradient: green tones
           var t = d.bx / w * 0.5 + d.by / h * 0.5;
-          var rr = Math.round(40 + (121 - 40) * t);
-          var gg = Math.round(140 + (255 - 140) * t);
-          var bb = Math.round(20 + (60 - 20) * t);
+          var rr = Math.round(pc.r1 + (pc.r2 - pc.r1) * t);
+          var gg = Math.round(pc.g1 + (pc.g2 - pc.g1) * t);
+          var bb = Math.round(pc.b1 + (pc.b2 - pc.b1) * t);
 
           ctx.fillStyle = 'rgba(' + rr + ',' + gg + ',' + bb + ',' + alpha + ')';
           ctx.beginPath();
@@ -3263,7 +3397,7 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
 
     // ── BorderGlow ──
     (function() {
-      const GRAD_C1 = '#79ff1d';
+      const GRAD_C1 = 'var(--accent)';
       const GRAD_C2 = '#a8ff6e';
       const GRAD_C3 = '#5ecf10';
 
@@ -3399,7 +3533,7 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       document.addEventListener('click', function(e) {
         const x = e.clientX, y = e.clientY;
         const count = 14;
-        const colors = ['#79ff1d','#a8ff6e','#5ecf10','#ffffff','#b8ff6e','#3d7a08'];
+        const colors = ['var(--accent)','#a8ff6e','#5ecf10','#ffffff','#b8ff6e','#3d7a08'];
         for (let i = 0; i < count; i++) {
           const p = document.createElement('div');
           p.className = 'click-particle';
@@ -3531,7 +3665,7 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       card.addEventListener('mouseenter', function() {
         tsc = scaleOnHover;
         card.style.transition = 'box-shadow 0.3s ease';
-        card.style.boxShadow = '0 25px 60px rgba(0,0,0,0.6), 0 0 50px rgba(121,255,29,0.12), 0 0 0 1px rgba(255,255,255,0.15) inset';
+        card.style.boxShadow = '0 25px 60px rgba(0,0,0,0.6), 0 0 50px rgba(var(--accent-rgb), 0.12), 0 0 0 1px rgba(255,255,255,0.15) inset';
         startLoop();
       });
 
