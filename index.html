@@ -1013,6 +1013,104 @@
     .copy-toast.show { opacity: 1; }
     .contact-card { cursor: pointer; }
 
+    /* Project detail modal */
+    .project-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .project-overlay.active { opacity: 1; pointer-events: auto; }
+    .project-modal {
+      position: relative;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 40px 36px;
+      max-width: 720px; width: 90%; max-height: 84vh;
+      overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    }
+    .project-modal::-webkit-scrollbar { width: 8px; }
+    .project-modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .project-modal::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+    .project-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--border); color: var(--text);
+      border: none; cursor: pointer; font-size: 22px; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .2s;
+    }
+    .project-close:hover { background: var(--border-hover); transform: rotate(90deg); }
+    .project-header { margin-bottom: 28px; padding-right: 48px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+    .project-name {
+      color: var(--text); font-size: 24px; font-weight: 750;
+      letter-spacing: -0.01em; margin-bottom: 8px;
+    }
+    .project-tagline {
+      color: var(--text-secondary); font-size: 14px; line-height: 1.6;
+      margin: 0;
+    }
+    .project-section { margin-bottom: 24px; }
+    .project-section:last-child { margin-bottom: 0; }
+    .project-section-title {
+      color: var(--accent); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    }
+    .project-section-title::before {
+      content: ''; width: 4px; height: 14px;
+      background: var(--accent); border-radius: 2px;
+    }
+    .project-list { list-style: none; padding: 0; margin: 0; }
+    .project-list li {
+      color: var(--text-secondary); font-size: 13px; line-height: 1.7;
+      padding: 6px 0 6px 20px; position: relative;
+    }
+    .project-list li::before {
+      content: ''; position: absolute; left: 4px; top: 14px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--text-muted);
+    }
+    .project-kv { display: grid; grid-template-columns: 100px 1fr; gap: 8px 16px; margin: 0; }
+    .project-kv dt {
+      color: var(--text-muted); font-size: 12px; font-weight: 600;
+      letter-spacing: 0.02em; padding-top: 2px;
+    }
+    .project-kv dd {
+      color: var(--text-secondary); font-size: 13px; line-height: 1.6;
+      margin: 0;
+    }
+    @media (max-width: 640px) {
+      .project-modal { padding: 32px 20px; max-height: 88vh; }
+      .project-name { font-size: 20px; }
+      .project-kv { grid-template-columns: 1fr; gap: 4px; }
+      .project-kv dd { padding-bottom: 8px; }
+    }
+    .project-screens {
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .project-screen-item { display: flex; flex-direction: column; gap: 8px; }
+    .project-screen-img {
+      width: 100%; border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--border);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      display: block;
+    }
+    .project-screen-caption {
+      display: flex; align-items: baseline; gap: 10px;
+      color: var(--text-secondary); font-size: 13px; line-height: 1.55;
+      margin: 0;
+    }
+    .project-screen-no {
+      color: var(--accent); font-weight: 700; font-size: 12px;
+      letter-spacing: 0.04em; flex-shrink: 0;
+      background: var(--border); padding: 2px 8px; border-radius: 4px;
+    }
+    @media (max-width: 640px) {
+      .project-screens { gap: 16px; }
+      .project-screen-caption { font-size: 12px; }
+    }
+
 
     /* ════════════════════════════════════════════
        ReflectiveCard — vanilla JS port (React Bits)
@@ -2688,9 +2786,13 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
 
 <script src="origami-data.js"></script>
 <script src="mirro-data.js"></script>
+<script src="mirro-screens-data.js"></script>
 <script src="spark-data.js"></script>
+<script src="spark-screens-data.js"></script>
 <script src="frameforge-data.js"></script>
+<script src="frameforge-screens-data.js"></script>
 <script src="pet-data.js"></script>
+<script src="pet-screens-data.js"></script>
 <script src="skill-data.js"></script>
 <script src="agent-data.js"></script>
 <script type="module">
@@ -2865,12 +2967,248 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
     }
 
     /* ── App ── */
+    const PROJECT_DETAILS = {
+      spark: {
+        name: 'Spark 灵犀',
+        tagline: '把 AI 热点文章生产从 5-6 小时压缩到 10 分钟以内的本地化生产工具。',
+        sections: [
+          {
+            title: '核心链路',
+            type: 'list',
+            items: [
+              '搜索热点（~10s）— Tavily 广搜 + Exa 深搜并行，URL 去重，LLM 翻译为中文',
+              '配置平台（~30s）— 6 平台 × 4 口吻 + 自定义字数',
+              '撰写文章（~20s）— SSE 流式 + 四层 Prompt（人格/去AI味/平台格式/审核）',
+              '编辑配图 — AI 自动识别 markdown 占位符 + 豆包 Seedream 三层标注',
+              '预览导出（~5s）— 6 平台专属 HTML 转换器'
+            ]
+          },
+          {
+            title: '关键 Trade-off',
+            type: 'list',
+            items: [
+              '本地优先 vs SaaS — 选本地，零服务器成本但无行为数据',
+              '双搜索源 vs 单源 — 选并行，召回率好但用户配两个 Key',
+              '固定 IP（涂涂）vs 自由 — 单角色状态驱动降低 prompt 复杂度',
+              '四层 Prompt vs 单层 — token 略贵但去 AI 味是核心'
+            ]
+          },
+          {
+            title: '卡点验证',
+            type: 'list',
+            items: [
+              'GLM-4.7 必须禁 thinking，否则 60-90s 超时回退到 fallback 全是同一张图',
+              '配图必须走 /batch + placeholder_index，否则 markdown 占位符不替换',
+              '豆包返回 JPEG 不是 PNG，扩展名解析失败会破碎',
+              'SSE 行尾可能是 \\r\\n，必须先 strip \\r 再比较 event 名'
+            ]
+          },
+          {
+            title: '成功标准',
+            type: 'kv',
+            items: [
+              ['时间', '单篇生产 5-6h → 10min（10-15x 压缩）'],
+              ['质量', 'AI 味识别失败率 ≥ 70%、平台审核通过率 ≥ 90%'],
+              ['工程', '本地全跑通、数据零上传、API 用户自配']
+            ]
+          },
+          {
+            title: '产品实拍（按用户使用流程）',
+            type: 'screens',
+            items: [
+              { no: '01', src: (window.__SPARK_SCREENS__||[])[0], caption: '准备就绪首界面 — 选择内容领域后开始生成' },
+              { no: '02', src: (window.__SPARK_SCREENS__||[])[1], caption: '搜索热点中 — Tavily 广搜 + Exa 深搜并行，URL 去重 + LLM 翻译' },
+              { no: '03', src: (window.__SPARK_SCREENS__||[])[2], caption: '搜索结果列表 — 多源结果去重后供用户挑选' },
+              { no: '04', src: (window.__SPARK_SCREENS__||[])[3], caption: '选择平台与口吻 — 6 平台 × 4 口吻 + 自定义字数' },
+              { no: '05', src: (window.__SPARK_SCREENS__||[])[4], caption: '流式撰写正文 — SSE 流式输出 + 四层 Prompt（人格/去AI味/格式/审核）' },
+              { no: '06', src: (window.__SPARK_SCREENS__||[])[5], caption: '文章+配图生成完成 — 占位符自动识别 + 豆包 Seedream 配图' },
+              { no: '07', src: (window.__SPARK_SCREENS__||[])[6], caption: '历史文章列表 — 本地 IndexedDB 持久化，零上传' },
+              { no: '08', src: (window.__SPARK_SCREENS__||[])[7], caption: '设置面板 — AI 文字/图片/搜索 API 全部用户自配，隐私零泄露' }
+            ]
+          }
+        ]
+      },
+      mirro: {
+        name: 'Mirro',
+        tagline: '本地运行的桌面自我观察工具，静默记录电脑行为，夜间 3-Agent 管道分析累积用户画像。',
+        sections: [
+          {
+            title: '核心链路',
+            type: 'list',
+            items: [
+              '实时静默采集 — active-win 3s 轮询 + uiohook 全局键盘钩子，落库 SQLite',
+              'Agent 1 Text Interpreter — 拼音还原 + 内容摘要（100-200 字）',
+              'Agent 2 Behavior Analyst — 角色卡生成（roleName/sketch/newPuzzle/feedback）',
+              'Agent 3 Portrait Manager — 画像维度更新（优先 modifications 而非 additions）',
+              '聊天链路 — system prompt 注入画像 + 7 天记忆 + 阶段 hint'
+            ]
+          },
+          {
+            title: '关键 Trade-off',
+            type: 'list',
+            items: [
+              '桌面宠物 vs 仪表盘 — 选宠物，长期使用不抗拒',
+              '实时 vs 夜间批处理 — 选夜间，不打断工作流',
+              '拼音还原 vs 数字统计 — 选 LLM 推断，行为内容比数字价值高一个数量级',
+              '3-Agent vs 单 Prompt — 职责清晰、单独降级'
+            ]
+          },
+          {
+            title: '卡点验证',
+            type: 'list',
+            items: [
+              '隐私脱敏必须本地完成（sanitizer.ts），API Key/密码/路径全规则过滤',
+              '拼音还原依赖 LLM 推断，否则画像退化为 RescueTime 式纯数字',
+              '画像必须优先 modifications 否则维度无限膨胀',
+              '记忆 30KB 上限必须主动清理，否则 prompt 无限膨胀'
+            ]
+          },
+          {
+            title: '成功标准',
+            type: 'kv',
+            items: [
+              ['画像增长率', '4 周 ≥ 15 维度、8 周至少 5 次 modifications'],
+              ['自我认知校准', '主观/客观差异点 ≤ 3/周、至少 1 次"发现盲点"'],
+              ['隐私零泄露', 'API Key/密码/token = 0 残留（硬指标）']
+            ]
+          },
+          {
+            title: '产品实拍（按用户使用流程）',
+            type: 'screens',
+            items: [
+              { no: '01', src: (window.__MIRRO_SCREENS__||[])[0], caption: '软件常驻桌面端 — 桌面宠物形态（选宠物而非仪表盘，长期使用不抗拒）' },
+              { no: '02', src: (window.__MIRRO_SCREENS__||[])[1], caption: '按键交互反馈 — uiohook 全局键盘钩子，触发宠物动画' },
+              { no: '03', src: (window.__MIRRO_SCREENS__||[])[2], caption: '胶囊条记录按键 — 关键创新：LLM 推断拼音还原出用户实际输入的文字（行为内容 vs 纯数字）' },
+              { no: '04', src: (window.__MIRRO_SCREENS__||[])[3], caption: '文字 → 用户画像 — Portrait Manager 优先 modifications，避免维度无限膨胀' },
+              { no: '05', src: (window.__MIRRO_SCREENS__||[])[4], caption: '每日统计 — 字数 / 删字率 / 常活动窗口（多维度采集，不只靠文字）' },
+              { no: '06', src: (window.__MIRRO_SCREENS__||[])[5], caption: '自定义宠物对话性格 — Behavior Analyst 生成角色卡（roleName/sketch/newPuzzle/feedback）' },
+              { no: '07', src: (window.__MIRRO_SCREENS__||[])[6], caption: '自定义推送频率与时间 — 夜间批处理，不打断工作流' },
+              { no: '08', src: (window.__MIRRO_SCREENS__||[])[7], caption: 'API 接口自定义 — 多 LLM 支持（OpenAI/Anthropic/DeepSeek/Zhipu/Ollama），用户自备 Key' },
+              { no: '09', src: (window.__MIRRO_SCREENS__||[])[8], caption: '对话保持角色一致 — system prompt 注入画像 + 7 天记忆 + 阶段 hint' },
+              { no: '10', src: (window.__MIRRO_SCREENS__||[])[9], caption: '（后期迭代）皮肤设计 — 形态可扩展，宠物形象个性化' }
+            ]
+          }
+        ]
+      },
+      frameforge: {
+        name: 'FrameForge 帧铸',
+        tagline: '浏览器端 AI 辅助帧动画生产工具，把"视频 → 游戏精灵帧"压缩到 5 分钟内。',
+        sections: [
+          {
+            title: '双层架构（核心创新）',
+            type: 'list',
+            items: [
+              'Agent 层（AI 决策）— Analyze/Chat/Segment/QC 四个 Agent 输出参数 JSON',
+              'Workflow 层（执行）— extract → chromaKey → crop → cleanResidual → quality 纯函数流水线',
+              '原则：Agent 决定"做什么"，Workflow 执行"怎么做"，AI 失败不影响核心功能'
+            ]
+          },
+          {
+            title: '关键 Trade-off',
+            type: 'list',
+            items: [
+              '浏览器端 vs 桌面端 — 选浏览器，零安装跨平台',
+              'Canvas API vs FFmpeg.wasm — 选 Canvas，包体积 < 2MB（FFmpeg 25MB+）',
+              '双层架构 — 复杂度高但 AI 全部可降级，无 Key 也能用核心功能',
+              '4 个独立 Agent vs 单 Agent — 职责清晰、单独降级'
+            ]
+          },
+          {
+            title: '卡点验证',
+            type: 'list',
+            items: [
+              'AI 必须可降级 — 4 个 Agent 任何一个挂掉，产品不能整体崩溃',
+              'JSON 输出强约束 — 正则提取 /\\{[\\s\\S]*\\}/，解析失败报 500',
+              '浏览器抽帧性能边界 — 主线程、内存、Canvas 16K 上限',
+              'CORS — 强制只接受文件上传，不接受 URL 输入'
+            ]
+          },
+          {
+            title: '成功标准',
+            type: 'kv',
+            items: [
+              ['工作流压缩', '30-65min → 5min（10-15x）'],
+              ['AI 决策准确度', '盲测胜率 ≥ 70%'],
+              ['AI 质检召回', '高严重度 ≥ 90%、误报 ≤ 10%']
+            ]
+          },
+          {
+            title: '产品实拍（按用户使用流程）',
+            type: 'screens',
+            items: [
+              { no: '01', src: (window.__FRAMEFORGE_SCREENS__||[])[0], caption: '初始界面 — 上传视频，进入工作台' },
+              { no: '02', src: (window.__FRAMEFORGE_SCREENS__||[])[1], caption: '预设工作流一键生成 — AI Agent 决策参数，Workflow 自动 extract → chromaKey → crop → quality' },
+              { no: '03', src: (window.__FRAMEFORGE_SCREENS__||[])[2], caption: '生成后扣绿幕 + 抽帧 — Canvas 纯函数流水线，AI 失败可手动接管' },
+              { no: '04', src: (window.__FRAMEFORGE_SCREENS__||[])[3], caption: '手动视频抽帧 — 当 AI 决策不满意时，手动指定关键帧范围' },
+              { no: '05', src: (window.__FRAMEFORGE_SCREENS__||[])[4], caption: '扣绿幕 + 导入复用资源 — 已抠除背景的精灵帧入库，跨项目复用' },
+              { no: '06', src: (window.__FRAMEFORGE_SCREENS__||[])[5], caption: '导出多格式结果 — 雪碧图 / 序列帧 / GIF，按平台适配' }
+            ]
+          }
+        ]
+      }
+    };
+
+    PROJECT_DETAILS.pet = {
+      name: '星座运势萌宠',
+      tagline: '把"星座 IP × 场景 × 治愈文案"打包成可批量产出的简单 Workflow，一次出 N 张小红书卡片。',
+      sections: [
+        {
+          title: '核心链路（参数驱动的简单 Workflow）',
+          type: 'list',
+          items: [
+            '12 个星座 IP 形象库 — 每个星座固定一个 Q 版萌系动物形象（狮子/小狗/小猫/小猪/美人鱼猫等），一次设计永久复用',
+            '场景库扩展 — 搬砖、咖啡、朋友、周末、宅家等高频治愈场景，决定卡片主题',
+            '一键组合生成 — 星座形象 × 场景 × 文案模板，左侧 20+ 缩略图 + 右侧详情 + 底部生成按钮',
+            '小红书瀑布流输出 — 自动排版成卡片网格（图 + 一句话文案 + 点赞/评论/收藏），导出即发'
+          ]
+        },
+        {
+          title: '关键 Trade-off',
+          type: 'list',
+          items: [
+            '固定 12 IP vs 每次新生成 — 选固定，形象一致、token 成本低、用户记住"我的星座 = 那只猫"',
+            '模板文案 vs LLM 自由生成 — 选模板（"今天也要努力搬砖呀～"），输出可控、调性统一',
+            '简单 Workflow vs Agent — 选 Workflow，参数驱动不依赖 LLM 决策，结果可预测、零降级风险',
+            '批量产出 vs 单张精修 — 选批量，单篇价值低但产出频率高，靠量取胜'
+          ]
+        },
+        {
+          title: '适用边界',
+          type: 'list',
+          items: [
+            '适合 — 小红书日常内容填充、IP 形象统一运营、星座垂类矩阵号、低成本起量',
+            '不适合 — 单篇深度内容、原创 IP 设计需求、强个性化叙事',
+            '本质判断 — 内容工厂不是内容创作，工程师视角的批量生产工具'
+          ]
+        },
+        {
+          title: '成功标准',
+          type: 'kv',
+          items: [
+            ['批量产能', '单次生成 ≥ 10 张卡片（设计师手画 30-60min/张）'],
+            ['IP 一致性', '同星座永远同形象（100%）'],
+            ['文案调性', '治愈系识别率 ≥ 80%、AI 味识别失败率 ≥ 70%']
+          ]
+        },
+        {
+          title: '项目实拍',
+          type: 'screens',
+          items: [
+            { no: '01', src: (window.__PET_SCREENS__||[])[0], caption: '12 个星座 IP 形象集合 — Q 版萌系动物形象库，每星座固定一形象永久复用' },
+            { no: '02', src: (window.__PET_SCREENS__||[])[1], caption: '工作链路图 — 参数驱动的简单 Workflow 节点' },
+            { no: '03', src: (window.__PET_SCREENS__||[])[2], caption: '一次生成多批场景配图 — 左侧 20+ 形象缩略图批量选 + 右侧详情 + 底部生成' },
+            { no: '04', src: (window.__PET_SCREENS__||[])[3], caption: '生成效果 — 小红书发现页瀑布流输出，图 + 一句话治愈文案 + 互动按钮，导出即发' }
+          ]
+        }
+      ]
+    };
+
     const DEFAULT_ITEMS = [
       { image: window.__ORIGAMI_IMG__ || 'origami-knight.jpg', text: '折纸骑士' },
-      { image: window.__MIRRO_IMG__ || 'mirro.jpg', text: 'Mirro' },
-      { image: window.__SPARK_IMG__ || 'spark.jpg', text: 'Spark灵犀' },
-      { image: window.__FRAMEFORGE_IMG__ || 'frameforge.jpg', text: 'FrameForge帧铸' },
-      { image: window.__PET_IMG__ || 'pet.jpg', text: '星座运势萌宠' },
+      { image: window.__MIRRO_IMG__ || 'mirro.jpg', text: 'Mirro', detail: PROJECT_DETAILS.mirro },
+      { image: window.__SPARK_IMG__ || 'spark.jpg', text: 'Spark灵犀', detail: PROJECT_DETAILS.spark },
+      { image: window.__FRAMEFORGE_IMG__ || 'frameforge.jpg', text: 'FrameForge帧铸', detail: PROJECT_DETAILS.frameforge },
+      { image: window.__PET_IMG__ || 'pet.jpg', text: '星座运势萌宠', detail: PROJECT_DETAILS.pet },
       { image: window.__SKILL_IMG__ || 'skill.jpg', text: 'Skill 设计' },
       { image: window.__AGENT_IMG__ || 'agent.jpg', text: '智能体搭建' }
     ];
@@ -2879,6 +3217,7 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       constructor(container, opts = {}) {
         const { items = DEFAULT_ITEMS, bend = 3, textColor = '#ffffff', borderRadius = 0.05, font = 'bold 30px sans-serif', scrollSpeed = 2, scrollEase = 0.05 } = opts;
         this.container = container;
+        this.items = items;
         this.scrollSpeed = scrollSpeed;
         this.scroll = { ease: scrollEase, current: 0, target: 0, last: 0 };
         this._autoScroll = true;
@@ -2909,13 +3248,54 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
         this._autoScroll = false;
         clearTimeout(this._resumeTimer);
         this.scroll.pos = this.scroll.current;
-        this._startX = (e.touches || [e])[0].clientX;
+        const p = (e.touches || [e])[0];
+        this._startX = p.clientX;
+        this._startY = p.clientY;
+        this._startTime = Date.now();
+        this._lastMoveEvent = null;
       }
-      _onMove(e) { if (!this.isDown) return; const x = (e.touches || [e])[0].clientX; this.scroll.target = this.scroll.pos + (this._startX - x) * this.scrollSpeed * 0.025; }
-      _onUp() {
+      _onMove(e) {
+        if (!this.isDown) return;
+        const p = (e.touches || [e])[0];
+        this._lastMoveEvent = p;
+        this.scroll.target = this.scroll.pos + (this._startX - p.clientX) * this.scrollSpeed * 0.025;
+      }
+      _onUp(e) {
+        if (!this.isDown) return;
         this.isDown = false;
+        let endX = this._startX, endY = this._startY;
+        if (e && e.changedTouches && e.changedTouches[0]) {
+          endX = e.changedTouches[0].clientX;
+          endY = e.changedTouches[0].clientY;
+        } else if (this._lastMoveEvent) {
+          endX = this._lastMoveEvent.clientX;
+          endY = this._lastMoveEvent.clientY;
+        }
+        const dx = Math.abs(endX - this._startX);
+        const dy = Math.abs(endY - this._startY);
+        const dt = Date.now() - (this._startTime || 0);
+        // 点击 vs 拖拽：移动 < 6px 且时长 < 300ms 视为点击
+        if (dx < 6 && dy < 6 && dt < 300) {
+          this._handleClick();
+          this._lastMoveEvent = null;
+          return;
+        }
+        this._lastMoveEvent = null;
         this._snap();
         this._resumeTimer = setTimeout(() => { this._autoScroll = true; }, 2000);
+      }
+      _handleClick() {
+        if (!this.medias || !this.medias[0]) return;
+        const w = this.medias[0].width;
+        if (!w) return;
+        const i = Math.round(Math.abs(this.scroll.target) / w);
+        const len = this.items.length;
+        if (!len) return;
+        const idx = ((i % len) + len) % len;
+        const item = this.items[idx];
+        if (item && item.detail && window.__openProject) {
+          window.__openProject(item.detail);
+        }
       }
       _snap() { if (!this.medias || !this.medias[0]) return; const w = this.medias[0].width; const i = Math.round(Math.abs(this.scroll.target) / w); this.scroll.target = (this.scroll.target < 0 ? -1 : 1) * w * i; }
       _onResize() {
@@ -3577,6 +3957,51 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       });
       document.getElementById('qrClose')?.addEventListener('click', () => qrOverlay.classList.remove('active'));
       qrOverlay?.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+
+      // ── Project detail modal ──
+      window.__openProject = function(detail) {
+        const overlay = document.getElementById('projectOverlay');
+        const content = document.getElementById('projectContent');
+        if (!overlay || !content || !detail) return;
+        let html = '<div class="project-header">';
+        html += '<h3 class="project-name">' + detail.name + '</h3>';
+        html += '<p class="project-tagline">' + detail.tagline + '</p>';
+        html += '</div>';
+        detail.sections.forEach(function(sec) {
+          html += '<div class="project-section">';
+          html += '<h4 class="project-section-title">' + sec.title + '</h4>';
+          if (sec.type === 'list') {
+            html += '<ul class="project-list">';
+            sec.items.forEach(function(it) { html += '<li>' + it + '</li>'; });
+            html += '</ul>';
+          } else if (sec.type === 'kv') {
+            html += '<dl class="project-kv">';
+            sec.items.forEach(function(pair) {
+              html += '<dt>' + pair[0] + '</dt><dd>' + pair[1] + '</dd>';
+            });
+            html += '</dl>';
+          } else if (sec.type === 'screens') {
+            html += '<div class="project-screens">';
+            sec.items.forEach(function(s) {
+              html += '<div class="project-screen-item">';
+              html += '<p class="project-screen-caption"><span class="project-screen-no">' + s.no + '</span><span>' + s.caption + '</span></p>';
+              html += '<img class="project-screen-img" src="' + s.src + '" alt="' + s.caption + '" loading="lazy" />';
+              html += '</div>';
+            });
+            html += '</div>';
+          }
+          html += '</div>';
+        });
+        content.innerHTML = html;
+        overlay.classList.add('active');
+        content.scrollTop = 0;
+      };
+      const projectOverlay = document.getElementById('projectOverlay');
+      document.getElementById('projectClose')?.addEventListener('click', () => projectOverlay?.classList.remove('active'));
+      projectOverlay?.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') projectOverlay?.classList.remove('active');
+      });
     });
   </script>
   <!-- Copy toast -->
@@ -3589,6 +4014,14 @@ void main(){vec4 color;mainImage(color,vUv*iResolution.xy);gl_FragColor=color;}`
       <h4>扫码添加微信</h4>
       <p>185****2971</p>
       <button class="qr-close" id="qrClose">关闭</button>
+    </div>
+  </div>
+
+  <!-- Project Detail Modal -->
+  <div class="project-overlay" id="projectOverlay">
+    <div class="project-modal">
+      <button class="project-close" id="projectClose" aria-label="关闭">&times;</button>
+      <div class="project-content" id="projectContent"></div>
     </div>
   </div>
 
